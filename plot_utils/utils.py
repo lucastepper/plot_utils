@@ -78,3 +78,11 @@ def format_axes_space(ax: plt.Axes):
     ax.spines["left"].set_color(None)
     ax.spines["right"].set_color(None)
     ax.set_zorder(0)
+
+
+def to_int(x):
+    """Convert number to integer if x % 1 == 0"""
+    if int(x) == x:
+        return int(x)
+    else:
+        return x
