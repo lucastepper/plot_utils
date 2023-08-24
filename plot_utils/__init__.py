@@ -1,3 +1,10 @@
 from .utils import *
 
-__all__ = ["subsample_logspace", "get_time_logspace", "format_axes_space", "to_int"]
+__all__ = [
+    "get_figure",
+    "get_size",
+    "subsample_logspace",
+    "get_time_logspace",
+    "format_axes_space",
+    "to_int",
+]

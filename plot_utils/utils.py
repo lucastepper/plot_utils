@@ -2,6 +2,66 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
+def get_size(width: float, scale: float = 1, subplots: tuple[int] = (1, 1), ratio: float = None):
+    """Return figure size for given width and scale.  The figure size is
+    adjusted to the subplot amount. The figure height is calculated based
+    on the golden ration. If ratio is given, it is scaled down.
+    Args:
+        width: width of the figure in points.
+        scale: scale for figure size.
+        subplots: Argmuent to plt.subplots.
+        ratio: ratio between figure height and width.
+            default: None, uses golden ratio.
+    Returns:
+        figsize (tuple[float, float]): figure size in inches.
+    """
+    # Width of figure (in pts)
+    fig_width_pt = width * scale
+    # Convert from pt to inches
+    inches_per_pt = 1 / 72.27
+    # Golden ratio to set aesthetic figure height
+    if not ratio:
+        ratio = (5**0.5 - 1) / 2
+    # Figure width in inches
+    fig_width_in = fig_width_pt * inches_per_pt
+    # Figure height in inches
+    fig_height_in = fig_width_in * ratio * (subplots[0] / subplots[1])
+    return (fig_width_in, fig_height_in)
+
+
+def get_figure(
+    subplot1: int,
+    subplot2: int,
+    wspace: float = 0.3,
+    hspace: float = 0.4,
+    scale: float = 1,
+    sharex: bool = False,
+    sharey: bool = False,
+    ratio: tuple[float, float] = None,
+    width: int = 520,
+):
+    """Return plt figure and axes object for given subplot dim, scale
+    between subplots and overall scale. Uses predefined LaTex width.
+    Arguments
+    subplot1: Number of subplots in horizontal dir
+    subplot2: Number of subplots in vertical dir
+    wspace: space between subplots in horizontal direction
+    hspace: space between subplots in vertical direction
+    scale: scale whole plot down by
+    ration: ratio between width and height
+    width: width in points. A4 paper is about 460
+    """
+    fig, axes = plt.subplots(
+        subplot1,
+        subplot2,
+        sharex=sharex,
+        sharey=sharey,
+        figsize=get_size(width, scale=scale, subplots=(subplot1, subplot2), ratio=ratio),
+    )
+    fig.subplots_adjust(wspace=wspace, hspace=hspace)
+    return fig, axes
+
+
 def get_log_func(base: float):
     """Get the logarithm function for a given base,
     numpy only has log naturalis, log2 and log10.
