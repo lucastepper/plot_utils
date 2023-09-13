@@ -7,4 +7,5 @@ __all__ = [
     "get_time_logspace",
     "format_axes_space",
     "to_int",
+    "add_letters",
 ]

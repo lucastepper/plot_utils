@@ -1,3 +1,5 @@
+import string
+from typing import Iterable
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -146,3 +148,21 @@ def to_int(x):
         return int(x)
     else:
         return x
+
+
+def add_letters(axes, letters: Iterable[str] = string.ascii_uppercase, **kwargs):
+    """Add capital letters to the each subplot for identification it its caption.
+    By default, each letter is at the top right corner of the subplot.
+    To overwrite the position of subplot i, give kwarg pos_i=(shift, height).
+    To overwrite default, give kwarg pos=(shift, height).
+    Alignment can be changed by kwarg va='top'/'bottom'
+        or ha='left'/'right'.
+    Arguments:
+        letters (Iterable[str]): The letters to use. default: string.ascii_uppercase
+    """
+    pos = kwargs.get("pos", (0.9, 0.9))
+    va = kwargs.get("va", "top")
+    ha = kwargs.get("ha", "right")
+    for i, (ax, letter) in enumerate(zip(axes, letters)):
+        shift, height = kwargs.get(f"pos_{i}", pos)
+        ax.text(shift, height, letter, transform=ax.transAxes, fontweight="bold", va=va, ha=ha)
