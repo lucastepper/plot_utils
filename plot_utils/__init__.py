@@ -8,4 +8,5 @@ __all__ = [
     "format_axes_space",
     "to_int",
     "add_letters",
+    "set_scientific_format",
 ]

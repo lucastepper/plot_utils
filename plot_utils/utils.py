@@ -1,5 +1,6 @@
 import string
 from typing import Iterable
+import matplotlib as mpl
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -166,3 +167,23 @@ def add_letters(axes, letters: Iterable[str] = string.ascii_uppercase, **kwargs)
     for i, (ax, letter) in enumerate(zip(axes, letters)):
         shift, height = kwargs.get(f"pos_{i}", pos)
         ax.text(shift, height, letter, transform=ax.transAxes, fontweight="bold", va=va, ha=ha)
+
+
+def set_scientific_format(
+    axis: mpl.axes.Axes, yaxis: bool = True, xaxis: bool = True, scilimits: tuple[int] = (0, 0)
+):
+    """Change the notation style of the given axis to scientific notation.
+    Surpresses the error that is thrown when the axis is logarithmic.
+    for both xaxis=True and yaxis=True, try both, again ignoring error.
+    Arguments:
+        axis: The axis to change.
+        yaxis: Whether to change the yaxis. default: True
+        xaxis: Whether to change the xaxis. default: True
+        scilimits: The scilimits to use. default: (0, 0)
+    """
+    for use_ax, ax in zip((xaxis, yaxis), ("x", "y")):
+        if use_ax:
+            try:
+                axis.ticklabel_format(axis=ax, style="sci", scilimits=(0, 0))
+            except AttributeError:
+                pass
