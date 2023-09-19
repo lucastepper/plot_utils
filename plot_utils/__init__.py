@@ -9,4 +9,5 @@ __all__ = [
     "to_int",
     "add_letters",
     "set_scientific_format",
+    "plot_smoothed",
 ]

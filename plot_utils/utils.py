@@ -1,8 +1,8 @@
 import string
 from typing import Iterable
 import matplotlib as mpl
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 def get_size(width: float, scale: float = 1, subplots: tuple[int] = (1, 1), ratio: float = None):
@@ -147,8 +147,7 @@ def to_int(x):
     """Convert number to integer if x % 1 == 0"""
     if int(x) == x:
         return int(x)
-    else:
-        return x
+    return x
 
 
 def add_letters(axes, letters: Iterable[str] = string.ascii_uppercase, **kwargs):
@@ -184,6 +183,20 @@ def set_scientific_format(
     for use_ax, ax in zip((xaxis, yaxis), ("x", "y")):
         if use_ax:
             try:
-                axis.ticklabel_format(axis=ax, style="sci", scilimits=(0, 0))
+                axis.ticklabel_format(axis=ax, style="sci", scilimits=scilimits)
             except AttributeError:
                 pass
+
+
+def plot_smoothed(axis: mpl.axes.Axes, data: np.ndarray, n_run_av: int = 10, **kwargs):
+    """Smooth the data by taking a running average. Plot n_run_av / 2
+    points at the beginning and end without smoothing."""
+    if not isinstance(data, np.ndarray):
+        data = np.array(data)
+    if data.ndim != 2 or data.shape[0] != 2:
+        raise ValueError(f"Data should be 2D array (2, n), but found {data.shape=}")
+    vals, data = data
+    data_smoothed = np.convolve(data, np.ones(n_run_av) / n_run_av, mode="same")
+    data_smoothed[: n_run_av // 2] = data[: n_run_av // 2]
+    data_smoothed[-n_run_av // 2 + 1 :] = data[-n_run_av // 2 + 1 :]
+    axis.plot(vals, data_smoothed, **kwargs)
