@@ -10,4 +10,5 @@ __all__ = [
     "add_letters",
     "set_scientific_format",
     "plot_smoothed",
+    "get_colormap",
 ]

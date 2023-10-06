@@ -54,6 +54,10 @@ def get_figure(
     ration: ratio between width and height
     width: width in points. A4 paper is about 460
     """
+    if sharey:
+        wspace = 0
+    if sharex:
+        hspace = 0
     fig, axes = plt.subplots(
         subplot1,
         subplot2,
@@ -200,3 +204,17 @@ def plot_smoothed(axis: mpl.axes.Axes, data: np.ndarray, n_run_av: int = 10, **k
     data_smoothed[: n_run_av // 2] = data[: n_run_av // 2]
     data_smoothed[-n_run_av // 2 + 1 :] = data[-n_run_av // 2 + 1 :]
     axis.plot(vals, data_smoothed, **kwargs)
+
+
+def get_colormap(
+    colormap: str, logarithmic: bool = False, vmin: float = 0.0, vmax: float = 1.0
+) -> mpl.colors.Colormap:
+    """Get a colormap from the given name. If logarithmic is True,
+    get a logarithmic colormap."""
+    cm_base = plt.get_cmap(colormap)
+    if logarithmic:
+        norm = mpl.colors.LogNorm(vmin=vmin, vmax=vmax)
+    else:
+        norm = mpl.colors.Normalize(vmin=vmin, vmax=vmax)
+    sm = plt.cm.ScalarMappable(norm=norm, cmap=cm_base)
+    return sm
