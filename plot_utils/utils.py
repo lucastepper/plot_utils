@@ -1,5 +1,5 @@
 import string
-from typing import Iterable
+from typing import Iterable, Optional
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
@@ -85,13 +85,23 @@ def get_log_func(base: float):
         raise ValueError(f"Base must be 2, 10 or 2.718, but is {base}")
 
 
-def subsample_logspace(data: np.ndarray, n: int, dt: float, base: float = 2.0):
+def subsample_logspace(
+    data: np.ndarray,
+    n: int,
+    dt: float,
+    base: float = 2.0,
+    return_time: bool = True,
+    time: Optional[np.ndarray] = None,
+) -> tuple[np.ndarray, np.ndarray]:
     """Subsample data logarithmically in time.
     Arguments:
         data: The data to subsample.
         n: The number of points to subsample.
         dt: The time step of the data.
         base: The base of the logarithm (2, 10 or 2.718). default: 2
+        return_time: Whether to return the time points of the subsampled data. Default: True
+        time: array with the time points of the data. default: None
+            If None, time is assumed to be np.arange(len(data)) * dt
     Returns:
         time: The time points of the subsampled data.
         data: The subsampled data.
@@ -100,7 +110,12 @@ def subsample_logspace(data: np.ndarray, n: int, dt: float, base: float = 2.0):
         return np.arange(len(data)) * dt, data
     end = get_log_func(base)(len(data))
     idxs = np.unique(np.logspace(0, end, n, base=base, dtype=int)) - 1
-    time = idxs * dt
+    if not return_time:
+        return data[idxs]
+    if time is not None:
+        time = time[idxs]
+    else:
+        time = idxs * dt
     return time, data[idxs]
 
 
