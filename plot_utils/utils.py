@@ -188,17 +188,27 @@ def add_letters(axes, letters: Iterable[str] = string.ascii_uppercase, **kwargs)
 
 
 def set_scientific_format(
-    axis: mpl.axes.Axes, yaxis: bool = True, xaxis: bool = True, scilimits: tuple[int] = (0, 0)
+    axis: mpl.axes.Axes, axis_descr: Optional[str] = None, yaxis: bool = True, xaxis: bool = True, scilimits: tuple[int] = (0, 0)
 ):
     """Change the notation style of the given axis to scientific notation.
     Surpresses the error that is thrown when the axis is logarithmic.
     for both xaxis=True and yaxis=True, try both, again ignoring error.
     Arguments:
         axis: The axis to change.
+        axis_descr: The description of which axis to use, ("x", "y" or "xy")
         yaxis: Whether to change the yaxis. default: True
         xaxis: Whether to change the xaxis. default: True
         scilimits: The scilimits to use. default: (0, 0)
     """
+    if axis_descr is not None:
+        if "x" in axis_descr:
+            xaxis = True
+        else:
+            xaxis = False
+        if "y" in axis_descr:
+            xaxis = True
+        else:
+            xaxis = False
     for use_ax, ax in zip((xaxis, yaxis), ("x", "y")):
         if use_ax:
             try:
