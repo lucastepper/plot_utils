@@ -11,4 +11,5 @@ __all__ = [
     "set_scientific_format",
     "plot_smoothed",
     "get_colormap",
+    "add_labels",
 ]

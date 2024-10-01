@@ -146,7 +146,7 @@ def get_time_logspace(tstart: float, tend: float, n: int, dt: float, base: float
     return time * dt
 
 
-def format_axes_space(ax: plt.Axes):
+def set_axes_empty(ax: plt.Axes):
     """Format an axes that is not used for plotting but for the space between
     two plots in horizontal direction. Serves to make such individual wspaces.
     Arguments:
@@ -155,6 +155,8 @@ def format_axes_space(ax: plt.Axes):
     ax.tick_params(
         left=False, right=False, top=False, bottom=False, labelleft=False, labelbottom=False
     )
+    ax.set_xticks([])
+    ax.set_yticks([])
     ax.spines["bottom"].set_color(None)
     ax.spines["top"].set_color(None)
     ax.spines["left"].set_color(None)
@@ -182,6 +184,11 @@ def add_letters(axes, letters: Iterable[str] = string.ascii_uppercase, **kwargs)
     pos = kwargs.get("pos", (0.9, 0.9))
     va = kwargs.get("va", "top")
     ha = kwargs.get("ha", "right")
+    for key in kwargs:
+        # get rid of _number
+        key = key[:3]
+        if key not in ["pos", "va", "ha"]:
+            raise KeyError(f"Legal keys for kwargs are va, ha, pos and pos_$i, got {key=}")
     for i, (ax, letter) in enumerate(zip(axes, letters)):
         shift, height = kwargs.get(f"pos_{i}", pos)
         ax.text(shift, height, letter, transform=ax.transAxes, fontweight="bold", va=va, ha=ha)
@@ -243,3 +250,19 @@ def get_colormap(
         norm = mpl.colors.Normalize(vmin=vmin, vmax=vmax)
     sm = plt.cm.ScalarMappable(norm=norm, cmap=cm_base)
     return sm
+
+
+def add_labels(axes: mpl.axes.Axes, label_type: str, **kwargs):
+    """ Add labels for a given set of common use cases"""
+    label_types = {
+        "kernel": (r"$t$ [ps]", r"$\Gamma$ [u/ps$^{-2}$]"),
+        "kernel_integral": (r"$t$ [ps]", r"$G$ [u/ps]"),
+        "cvv": (r"$t$ [ps]", r"$C^{vv}$ [nm$^2$/ps$^2$]"),
+        "cxdu": (r"$t$ [ps]", r"$C{\nabla U x}$ [$k_{\text{B}}T$]"),
+    }
+    for ltype, labels in label_types.items():
+        if label_type == ltype:
+            axes.set_xlabel(labels[0])
+            axes.set_ylabel(labels[1])
+            return
+    raise ValueError(f"Unknown {label_type=}, allowed are {list(label_types.keys())}")
