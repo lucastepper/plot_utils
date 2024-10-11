@@ -187,15 +187,19 @@ def add_letters(axes, letters: Iterable[str] = string.ascii_uppercase, **kwargs)
     for key in kwargs:
         # get rid of _number
         key = key[:3]
-        if key not in ["pos", "va", "ha"]:
-            raise KeyError(f"Legal keys for kwargs are va, ha, pos and pos_$i, got {key=}")
+        if key not in ["pos", "va", "ha", "letters"]:
+            raise KeyError(f"Legal keys for kwargs are va, ha, pos, letters and pos_$i, got {key=}")
     for i, (ax, letter) in enumerate(zip(axes, letters)):
         shift, height = kwargs.get(f"pos_{i}", pos)
         ax.text(shift, height, letter, transform=ax.transAxes, fontweight="bold", va=va, ha=ha)
 
 
 def set_scientific_format(
-    axis: mpl.axes.Axes, axis_descr: Optional[str] = None, yaxis: bool = True, xaxis: bool = True, scilimits: tuple[int] = (0, 0)
+    axis: mpl.axes.Axes,
+    axis_descr: Optional[str] = None,
+    yaxis: bool = True,
+    xaxis: bool = True,
+    scilimits: tuple[int] = (0, 0),
 ):
     """Change the notation style of the given axis to scientific notation.
     Surpresses the error that is thrown when the axis is logarithmic.
@@ -253,7 +257,7 @@ def get_colormap(
 
 
 def add_labels(axes: mpl.axes.Axes, label_type: str, **kwargs):
-    """ Add labels for a given set of common use cases"""
+    """Add labels for a given set of common use cases"""
     label_types = {
         "kernel": (r"$t$ [ps]", r"$\Gamma$ [u/ps$^{-2}$]"),
         "kernel_integral": (r"$t$ [ps]", r"$G$ [u/ps]"),
@@ -266,3 +270,17 @@ def add_labels(axes: mpl.axes.Axes, label_type: str, **kwargs):
             axes.set_ylabel(labels[1])
             return
     raise ValueError(f"Unknown {label_type=}, allowed are {list(label_types.keys())}")
+
+
+def set_fontsize(size):
+    """Set font size for everything"""
+    plt.rcParams.update(
+        {
+            "font.size": size,
+            "axes.titlesize": size,
+            "axes.labelsize": size,
+            "xtick.labelsize": size,
+            "ytick.labelsize": size,
+            "legend.fontsize": size,
+        }
+    )

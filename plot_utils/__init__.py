@@ -12,4 +12,5 @@ __all__ = [
     "plot_smoothed",
     "get_colormap",
     "add_labels",
+    "set_fontsize",
 ]
