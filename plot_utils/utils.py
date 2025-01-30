@@ -259,7 +259,7 @@ def get_colormap(
 def add_labels(axes: mpl.axes.Axes, label_type: str, **kwargs):
     """Add labels for a given set of common use cases"""
     label_types = {
-        "kernel": (r"$t$ [ps]", r"$\Gamma$ [u/ps$^{-2}$]"),
+        "kernel": (r"$t$ [ps]", r"$\Gamma$ [u/ps$^2$]"),
         "kernel_integral": (r"$t$ [ps]", r"$G$ [u/ps]"),
         "cvv": (r"$t$ [ps]", r"$C^{vv}$ [nm$^2$/ps$^2$]"),
         "cxdu": (r"$t$ [ps]", r"$C{\nabla U x}$ [$k_{\text{B}}T$]"),
