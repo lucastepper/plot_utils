@@ -42,6 +42,7 @@ def get_figure(
     sharey: bool = False,
     ratio: tuple[float, float] = None,
     width: int = 520,
+    dpi: Optional[float] = None,
 ):
     """Return plt figure and axes object for given subplot dim, scale
     between subplots and overall scale. Uses predefined LaTex width.
@@ -53,6 +54,7 @@ def get_figure(
     scale: scale whole plot down by
     ration: ratio between width and height
     width: width in points. A4 paper is about 460
+    dpi: resolution for paper
     """
     if sharey:
         wspace = 0
@@ -64,6 +66,7 @@ def get_figure(
         sharex=sharex,
         sharey=sharey,
         figsize=get_size(width, scale=scale, subplots=(subplot1, subplot2), ratio=ratio),
+        dpi=dpi,
     )
     fig.subplots_adjust(wspace=wspace, hspace=hspace)
     return fig, axes
